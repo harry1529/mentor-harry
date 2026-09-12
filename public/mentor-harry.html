@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mentor Harry — Find your path</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy-950:#10192E;
+    --navy-900:#152142;
+    --navy-800:#1D2E58;
+    --paper:#F6F2E9;
+    --amber:#E2A33D;
+    --amber-dim:#B9873A;
+    --teal:#4F9E92;
+    --line: rgba(246,242,233,0.14);
+    --text-dim: rgba(246,242,233,0.62);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--navy-950);
+    color:var(--paper);
+    font-family:'IBM Plex Sans', sans-serif;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.serif{font-family:'Fraunces', serif;}
+  a{color:inherit;}
+  .wrap{max-width:1120px; margin:0 auto; padding:0 32px;}
+  @media (max-width:640px){.wrap{padding:0 20px;}}
+
+  /* NAV */
+  nav{
+    position:sticky; top:0; z-index:40;
+    background:rgba(16,25,46,0.86); backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  nav .wrap{display:flex; align-items:center; justify-content:space-between; padding-top:18px; padding-bottom:18px;}
+  .brand{display:flex; align-items:center; gap:10px; font-weight:600; font-size:1.05rem;}
+  .brand-mark{
+    width:30px; height:30px; border-radius:50%;
+    background:radial-gradient(circle at 32% 32%, var(--amber), var(--amber-dim) 70%);
+    flex-shrink:0;
+  }
+  .navlinks{display:flex; gap:28px; font-size:0.92rem; color:var(--text-dim);}
+  .navlinks a{text-decoration:none; transition:color .2s;}
+  .navlinks a:hover{color:var(--paper);}
+  @media (max-width:720px){.navlinks{display:none;}}
+
+  /* HERO */
+  .hero{padding:96px 0 72px; position:relative; overflow:hidden;}
+  .hero .wrap{display:grid; grid-template-columns:1.1fr 0.9fr; gap:56px; align-items:center;}
+  @media (max-width:880px){.hero .wrap{grid-template-columns:1fr;}}
+  .hero h1{
+    font-size:clamp(2.4rem, 4.6vw, 3.6rem);
+    font-weight:500;
+    line-height:1.08;
+    letter-spacing:-0.01em;
+  }
+  .hero p.lede{
+    margin-top:22px; font-size:1.08rem; color:var(--text-dim); max-width:46ch;
+  }
+  .hero-ctas{margin-top:34px; display:flex; gap:16px; flex-wrap:wrap;}
+  .btn{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:13px 24px; border-radius:3px; font-size:0.95rem; font-weight:500;
+    text-decoration:none; cursor:pointer; border:1px solid transparent;
+    font-family:'IBM Plex Sans', sans-serif;
+  }
+  .btn-primary{background:var(--amber); color:var(--navy-950);}
+  .btn-primary:hover{background:#eab35a;}
+  .btn-ghost{border-color:var(--line); color:var(--paper); background:transparent;}
+  .btn-ghost:hover{border-color:rgba(246,242,233,0.4);}
+
+  /* Converging paths visual */
+  .paths-viz{position:relative; height:340px;}
+  .paths-viz svg{width:100%; height:100%;}
+  .path-label{
+    font-size:0.72rem; fill:var(--text-dim); font-family:'IBM Plex Sans', sans-serif;
+  }
+
+  /* INTAKE SECTION */
+  section{padding:88px 0;}
+  .section-head{max-width:56ch; margin-bottom:44px;}
+  .eyebrow{font-size:0.82rem; color:var(--amber); font-weight:500;}
+  .section-head h2{font-size:clamp(1.7rem,3vw,2.3rem); font-weight:500; margin-top:10px;}
+  .section-head p{color:var(--text-dim); margin-top:14px; font-size:1rem;}
+
+  .intake-card{
+    background:var(--navy-900); border:1px solid var(--line); border-radius:6px;
+    padding:36px; max-width:680px;
+  }
+  .intake-progress{display:flex; gap:6px; margin-bottom:28px;}
+  .intake-progress span{height:3px; flex:1; background:var(--line); border-radius:2px; overflow:hidden;}
+  .intake-progress span i{display:block; height:100%; width:0%; background:var(--amber); transition:width .35s;}
+  .intake-q{font-size:1.18rem; font-family:'Fraunces', serif; font-weight:500; margin-bottom:18px;}
+  .intake-options{display:flex; flex-direction:column; gap:10px;}
+  .opt-btn{
+    text-align:left; padding:13px 16px; border-radius:4px; border:1px solid var(--line);
+    background:transparent; color:var(--paper); font-family:'IBM Plex Sans', sans-serif;
+    font-size:0.95rem; cursor:pointer; transition:border-color .15s, background .15s;
+  }
+  .opt-btn:hover{border-color:var(--amber); background:rgba(226,163,61,0.06);}
+  .intake-text-row{display:flex; gap:10px; margin-top:4px;}
+  .intake-text-row input{
+    flex:1; padding:13px 16px; border-radius:4px; border:1px solid var(--line);
+    background:var(--navy-950); color:var(--paper); font-family:'IBM Plex Sans', sans-serif; font-size:0.95rem;
+  }
+  .intake-text-row input:focus{outline:none; border-color:var(--amber);}
+  .intake-foot{margin-top:22px; display:flex; justify-content:space-between; align-items:center;}
+  .skip-link{font-size:0.85rem; color:var(--text-dim); background:none; border:none; cursor:pointer; text-decoration:underline;}
+  .loading-row{display:flex; align-items:center; gap:10px; color:var(--text-dim); font-size:0.92rem;}
+  .spinner{width:14px; height:14px; border-radius:50%; border:2px solid var(--line); border-top-color:var(--amber); animation:spin 0.8s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  .results{margin-top:36px; display:flex; flex-direction:column; gap:14px;}
+  .match-card{
+    border:1px solid var(--line); border-radius:6px; padding:22px 24px; background:var(--navy-800);
+  }
+  .match-top{display:flex; justify-content:space-between; align-items:baseline; gap:12px;}
+  .match-top h4{font-family:'Fraunces', serif; font-size:1.15rem; font-weight:500;}
+  .match-score{font-size:0.85rem; color:var(--amber); white-space:nowrap;}
+  .match-why{color:var(--text-dim); font-size:0.92rem; margin-top:8px;}
+  .match-meta{display:flex; gap:18px; margin-top:12px; font-size:0.82rem; color:var(--text-dim); flex-wrap:wrap;}
+  .match-meta b{color:var(--paper); font-weight:500;}
+  .disclaimer{font-size:0.8rem; color:var(--text-dim); margin-top:18px; font-style:italic;}
+
+  /* EXPLORE GRID */
+  .cat-grid{display:grid; grid-template-columns:repeat(4, 1fr); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:6px; overflow:hidden;}
+  @media (max-width:880px){.cat-grid{grid-template-columns:repeat(2,1fr);}}
+  @media (max-width:520px){.cat-grid{grid-template-columns:1fr;}}
+  .cat-cell{
+    background:var(--navy-900); padding:24px 20px; min-height:118px;
+    display:flex; flex-direction:column; justify-content:space-between;
+    cursor:default; transition:background .15s;
+  }
+  .cat-cell:hover{background:var(--navy-800);}
+  .cat-cell h4{font-family:'Fraunces', serif; font-weight:500; font-size:1.02rem;}
+  .cat-cell span{font-size:0.78rem; color:var(--text-dim); margin-top:8px;}
+
+  /* COMPARE */
+  .compare-card{
+    background:var(--navy-900); border:1px solid var(--line); border-radius:6px; padding:32px; max-width:680px;
+  }
+  .compare-row{display:flex; gap:10px;}
+  .compare-row input{
+    flex:1; padding:13px 16px; border-radius:4px; border:1px solid var(--line);
+    background:var(--navy-950); color:var(--paper); font-size:0.95rem;
+  }
+  .compare-row input:focus{outline:none; border-color:var(--amber);}
+  .compare-hint{font-size:0.82rem; color:var(--text-dim); margin-top:10px;}
+  .compare-table{margin-top:26px; width:100%; border-collapse:collapse; font-size:0.88rem;}
+  .compare-table th, .compare-table td{padding:10px 12px; border-bottom:1px solid var(--line); text-align:left; vertical-align:top;}
+  .compare-table th{color:var(--amber); font-weight:500; font-size:0.8rem; text-transform:none;}
+
+  footer{border-top:1px solid var(--line); padding:40px 0; margin-top:20px;}
+  footer .wrap{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; color:var(--text-dim); font-size:0.85rem;}
+
+  /* AI CHAT WIDGET */
+  #chatToggle{
+    position:fixed; right:24px; bottom:24px; z-index:60;
+    width:56px; height:56px; border-radius:50%; border:none; cursor:pointer;
+    background:var(--amber); color:var(--navy-950);
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 6px 20px rgba(0,0,0,0.35);
+    transition:transform .15s;
+  }
+  #chatToggle:hover{transform:scale(1.05);}
+  #chatToggle svg{width:24px; height:24px;}
+
+  #chatPanel{
+    position:fixed; right:24px; bottom:92px; z-index:60;
+    width:380px; max-width:calc(100vw - 32px);
+    height:520px; max-height:calc(100vh - 140px);
+    background:var(--navy-900); border:1px solid var(--line); border-radius:8px;
+    display:none; flex-direction:column; overflow:hidden;
+    box-shadow:0 16px 48px rgba(0,0,0,0.45);
+  }
+  #chatPanel.open{display:flex;}
+  .chat-head{
+    padding:16px 18px; border-bottom:1px solid var(--line);
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .chat-head-title{display:flex; align-items:center; gap:10px;}
+  .chat-head-title .brand-mark{width:22px; height:22px;}
+  .chat-head h5{font-family:'Fraunces', serif; font-weight:500; font-size:0.98rem;}
+  .chat-head p{font-size:0.74rem; color:var(--text-dim); margin-top:1px;}
+  #chatClose{background:none; border:none; color:var(--text-dim); cursor:pointer; font-size:1.1rem; line-height:1; padding:4px;}
+  #chatClose:hover{color:var(--paper);}
+
+  #chatMessages{flex:1; overflow-y:auto; padding:16px 18px; display:flex; flex-direction:column; gap:12px;}
+  .chat-msg{max-width:88%; font-size:0.89rem; line-height:1.5; padding:10px 13px; border-radius:8px;}
+  .chat-msg.bot{background:var(--navy-800); align-self:flex-start; border-bottom-left-radius:2px;}
+  .chat-msg.user{background:var(--amber); color:var(--navy-950); align-self:flex-end; border-bottom-right-radius:2px;}
+  .chat-msg.bot p, .chat-msg.user p{margin-top:6px;}
+  .chat-msg.bot p:first-child, .chat-msg.user p:first-child{margin-top:0;}
+  .chat-typing{display:flex; gap:4px; align-self:flex-start; padding:10px 13px;}
+  .chat-typing span{width:6px; height:6px; border-radius:50%; background:var(--text-dim); animation:blink 1.2s infinite;}
+  .chat-typing span:nth-child(2){animation-delay:.2s;}
+  .chat-typing span:nth-child(3){animation-delay:.4s;}
+  @keyframes blink{0%,80%,100%{opacity:.25;} 40%{opacity:1;}}
+
+  .chat-suggest{display:flex; flex-wrap:wrap; gap:6px; padding:0 18px 12px;}
+  .chat-suggest button{
+    font-size:0.76rem; padding:6px 10px; border-radius:20px; border:1px solid var(--line);
+    background:transparent; color:var(--text-dim); cursor:pointer;
+  }
+  .chat-suggest button:hover{border-color:var(--amber); color:var(--paper);}
+
+  .chat-input-row{border-top:1px solid var(--line); padding:12px; display:flex; gap:8px;}
+  .chat-input-row input{
+    flex:1; padding:11px 13px; border-radius:5px; border:1px solid var(--line);
+    background:var(--navy-950); color:var(--paper); font-size:0.88rem; font-family:'IBM Plex Sans', sans-serif;
+  }
+  .chat-input-row input:focus{outline:none; border-color:var(--amber);}
+  .chat-send{
+    width:40px; height:40px; border-radius:5px; border:none; background:var(--amber);
+    color:var(--navy-950); cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+  .chat-send:disabled{opacity:0.5; cursor:default;}
+  @media (max-width:480px){
+    #chatPanel{right:16px; left:16px; width:auto; bottom:84px;}
+    #chatToggle{right:16px; bottom:16px;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="brand"><span class="brand-mark"></span>Mentor Harry</div>
+    <div class="navlinks">
+      <a href="#intake">Find my path</a>
+      <a href="#explore">Explore careers</a>
+      <a href="#compare">Compare</a>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <h1>Every path starts with<br>being understood.</h1>
+      <p class="lede">Mentor Harry doesn't assume you're an engineer, or that you're even in college yet. Tell it where you actually are — medicine, commerce, trades, the arts, undecided — and it builds the path from there.</p>
+      <div class="hero-ctas">
+        <a href="#intake" class="btn btn-primary">Start your intake</a>
+        <a href="#explore" class="btn btn-ghost">Browse career paths</a>
+      </div>
+    </div>
+    <div class="paths-viz">
+      <svg viewBox="0 0 400 340" xmlns="http://www.w3.org/2000/svg">
+        <g stroke="rgba(246,242,233,0.28)" stroke-width="1" fill="none">
+          <path d="M20,30 C160,60 260,150 380,170"/>
+          <path d="M20,90 C160,95 260,145 380,170"/>
+          <path d="M20,170 C160,170 260,170 380,170"/>
+          <path d="M20,250 C160,240 260,190 380,170"/>
+          <path d="M20,310 C160,270 260,190 380,170"/>
+        </g>
+        <circle cx="380" cy="170" r="5" fill="#E2A33D"/>
+        <circle cx="20" cy="30" r="3" fill="#4F9E92"/>
+        <circle cx="20" cy="90" r="3" fill="#4F9E92"/>
+        <circle cx="20" cy="170" r="3" fill="#4F9E92"/>
+        <circle cx="20" cy="250" r="3" fill="#4F9E92"/>
+        <circle cx="20" cy="310" r="3" fill="#4F9E92"/>
+        <text x="26" y="24" class="path-label">Medicine</text>
+        <text x="26" y="84" class="path-label">Commerce</text>
+        <text x="26" y="164" class="path-label">Design</text>
+        <text x="26" y="244" class="path-label">Trades</text>
+        <text x="26" y="304" class="path-label">Undecided</text>
+        <text x="330" y="150" class="path-label" fill="#E2A33D">You</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section id="intake">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Universal career intake</div>
+      <h2>A few honest questions, not a form.</h2>
+      <p>Answer at your own pace. Mentor Harry builds a shortlist from how you actually think and work — not from what you studied last year.</p>
+    </div>
+
+    <div class="intake-card" id="intakeCard">
+      <div class="intake-progress" id="progressBar"></div>
+      <div id="intakeBody"></div>
+    </div>
+  </div>
+</section>
+
+<section id="explore">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Explore careers</div>
+      <h2>Sixteen ecosystems, not one.</h2>
+      <p>Each category opens into what the work actually involves, how to enter it, and how to test it before you commit.</p>
+    </div>
+    <div class="cat-grid" id="catGrid"></div>
+  </div>
+</section>
+
+<section id="compare">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Career decision</div>
+      <h2>Weighing two options?</h2>
+      <p>"CA vs MBA." "Government job vs private job." "Designer vs developer." Type the decision you're stuck on.</p>
+    </div>
+    <div class="compare-card">
+      <div class="compare-row">
+        <input type="text" id="compareInput" placeholder="e.g. CA vs MBA">
+        <button class="btn btn-primary" id="compareBtn">Compare</button>
+      </div>
+      <p class="compare-hint">Comparisons are general starting points — the right call depends on your own situation.</p>
+      <div id="compareResult"></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>Mentor Harry</span>
+    <span>AI compatibility estimates, not diagnoses. Always sanity-check with a real mentor.</span>
+  </div>
+</footer>
+
+<button id="chatToggle" aria-label="Open chat with Mentor Harry">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+</button>
+
+<div id="chatPanel">
+  <div class="chat-head">
+    <div class="chat-head-title">
+      <span class="brand-mark"></span>
+      <div>
+        <h5>Ask Mentor Harry</h5>
+        <p>For anything the tools above don't cover</p>
+      </div>
+    </div>
+    <button id="chatClose" aria-label="Close chat">✕</button>
+  </div>
+  <div id="chatMessages"></div>
+  <div class="chat-suggest" id="chatSuggest">
+    <button data-q="Is a BBA worth it if I'm not sure about business?">BBA if unsure about business?</button>
+    <button data-q="How do I switch from commerce into UX design?">Commerce → UX design?</button>
+    <button data-q="What's the realistic timeline to become employable as a data analyst?">Timeline for data analyst?</button>
+  </div>
+  <div class="chat-input-row">
+    <input type="text" id="chatInput" placeholder="Ask about any career, path, or decision…">
+    <button class="chat-send" id="chatSend" aria-label="Send">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+    </button>
+  </div>
+</div>
+
+<script>
+const CATS = [
+  ["Engineering & Technology","CS, electronics, mechanical, robotics"],
+  ["Medical & Healthcare","MBBS, nursing, pharmacy, psychology"],
+  ["Commerce & Finance","CA, CFA, banking, financial analysis"],
+  ["Management & Business","MBA, product, operations, consulting"],
+  ["Law","Corporate, criminal, legal tech, judiciary"],
+  ["Arts & Humanities","History, languages, international relations"],
+  ["Science","Physics, biology, statistics, research"],
+  ["Design & Creative","UI/UX, fashion, architecture, film"],
+  ["Media & Communication","Journalism, PR, digital media"],
+  ["Education","Teaching, academia, instructional design"],
+  ["Government & Public Sector","UPSC, SSC, banking, civil services"],
+  ["Defence & Uniformed Services","Army, navy, air force, police"],
+  ["Hospitality & Travel","Hotel management, aviation, culinary"],
+  ["Skilled & Vocational","Electrician, welding, HVAC, CNC"],
+  ["Agriculture","Agri-science, agribusiness, horticulture"],
+  ["Entrepreneurship","Startups, freelancing, creator businesses"],
+];
+const grid = document.getElementById('catGrid');
+CATS.forEach(([name, desc]) => {
+  const cell = document.createElement('div');
+  cell.className = 'cat-cell';
+  cell.innerHTML = `<h4>${name}</h4><span>${desc}</span>`;
+  grid.appendChild(cell);
+});
+
+// ---------- INTAKE FLOW ----------
+const QUESTIONS = [
+  {
+    key: 'stage',
+    q: "Where are you right now?",
+    type: 'options',
+    options: ["Class 10 / choosing a stream", "Class 12 / choosing a degree", "Undergraduate", "Graduate, job-hunting", "Working, considering a change", "Preparing for competitive exams", "Not sure how to describe it"]
+  },
+  {
+    key: 'study',
+    q: "What are you studying or have you studied — if anything?",
+    type: 'text',
+    placeholder: "e.g. B.Com, Biology (12th), nothing formal, self-taught..."
+  },
+  {
+    key: 'enjoy',
+    q: "What kind of work sounds interesting to you?",
+    type: 'options',
+    options: ["Working with people", "Working with numbers or money", "Working with computers or systems", "Working with your hands / machines", "Working with ideas, words or design", "Research and analysis", "I genuinely don't know yet"]
+  },
+  {
+    key: 'strength',
+    q: "What do people usually come to you for help with?",
+    type: 'text',
+    placeholder: "e.g. explaining things simply, organizing plans, fixing things..."
+  },
+  {
+    key: 'mode',
+    q: "Job, business, government career, or still open?",
+    type: 'options',
+    options: ["A stable job", "Starting my own thing", "A government career", "Freelancing / independent work", "Still open to anything"]
+  },
+  {
+    key: 'constraints',
+    q: "Anything shaping your options — location, budget, timeline?",
+    type: 'text',
+    placeholder: "e.g. need to start earning within a year, based in a small town..."
+  }
+];
+
+let qIndex = 0;
+const answers = {};
+const body = document.getElementById('intakeBody');
+const progressBar = document.getElementById('progressBar');
+
+function buildProgress(){
+  progressBar.innerHTML = '';
+  QUESTIONS.forEach((_, i) => {
+    const span = document.createElement('span');
+    span.innerHTML = '<i></i>';
+    progressBar.appendChild(span);
+  });
+}
+buildProgress();
+
+function updateProgress(){
+  const bars = progressBar.querySelectorAll('span i');
+  bars.forEach((bar, i) => { bar.style.width = i < qIndex ? '100%' : (i === qIndex ? '40%' : '0%'); });
+}
+
+function renderQuestion(){
+  if (qIndex >= QUESTIONS.length){ runDiscovery(); return; }
+  updateProgress();
+  const q = QUESTIONS[qIndex];
+  let html = `<div class="intake-q">${q.q}</div>`;
+  if (q.type === 'options'){
+    html += `<div class="intake-options">`;
+    q.options.forEach(opt => {
+      html += `<button class="opt-btn" data-val="${opt.replace(/"/g,'&quot;')}">${opt}</button>`;
+    });
+    html += `</div>`;
+  } else {
+    html += `<div class="intake-text-row">
+      <input type="text" id="textAns" placeholder="${q.placeholder}">
+      <button class="btn btn-primary" id="textNext">Next</button>
+    </div>`;
+  }
+  html += `<div class="intake-foot"><button class="skip-link" id="skipQ">Skip this one</button></div>`;
+  body.innerHTML = html;
+
+  if (q.type === 'options'){
+    body.querySelectorAll('.opt-btn').forEach(btn => {
+      btn.addEventListener('click', () => { answers[q.key] = btn.dataset.val; qIndex++; renderQuestion(); });
+    });
+  } else {
+    const input = document.getElementById('textAns');
+    const go = () => { answers[q.key] = input.value.trim() || '(not answered)'; qIndex++; renderQuestion(); };
+    document.getElementById('textNext').addEventListener('click', go);
+    input.addEventListener('keydown', e => { if (e.key === 'Enter') go(); });
+    input.focus();
+  }
+  document.getElementById('skipQ').addEventListener('click', () => { answers[q.key] = '(skipped)'; qIndex++; renderQuestion(); });
+}
+
+async function callClaude(prompt){
+  const response = await fetch("/api/messages", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      max_tokens: 1000,
+      messages: [{ role: "user", content: prompt }]
+    })
+  });
+  const data = await response.json();
+  if (!response.ok) throw new Error(data.error || 'AI request failed');
+  const text = data.content.map(b => b.text || '').join('\n');
+  return text.replace(/```json|```/g, '').trim();
+}
+
+async function runDiscovery(){
+  updateProgress();
+  body.innerHTML = `<div class="loading-row"><span class="spinner"></span> Reading your answers and shortlisting paths…</div>`;
+  const summary = QUESTIONS.map(q => `${q.q} → ${answers[q.key]}`).join('\n');
+  const prompt = `You are a career-discovery engine inside a universal career guidance product called Mentor Harry, which serves students from ALL fields (medicine, commerce, law, arts, trades, government, design, etc.) — never assume engineering or coding by default.
+
+A user answered this intake:
+${summary}
+
+Based on this, return ONLY a JSON array (no prose, no markdown fences) of exactly 4 career matches, most fitting first. Each item:
+{"title": string, "score": number (1-99, an estimate not a scientific score), "why": string (1 sentence, grounded in their specific answers), "education": string (short), "timeToEmployable": string (short), "entryRoute": string (short)}
+
+Respect their actual stage and stated preferences — do not default to software/tech unless their answers point there.`;
+
+  try {
+    const raw = await callClaude(prompt);
+    const matches = JSON.parse(raw);
+    renderResults(matches);
+  } catch (err) {
+    body.innerHTML = `<div class="loading-row">Something went wrong generating your shortlist. <button class="btn btn-ghost" id="retryBtn" style="margin-left:8px;">Try again</button></div>`;
+    document.getElementById('retryBtn').addEventListener('click', runDiscovery);
+  }
+}
+
+function renderResults(matches){
+  let html = `<div class="intake-q">Your shortlist</div><div class="results">`;
+  matches.forEach(m => {
+    html += `<div class="match-card">
+      <div class="match-top"><h4>${m.title}</h4><span class="match-score">${m.score}% match</span></div>
+      <div class="match-why">${m.why}</div>
+      <div class="match-meta">
+        <div><b>Education</b> · ${m.education}</div>
+        <div><b>Time to ready</b> · ${m.timeToEmployable}</div>
+        <div><b>Entry route</b> · ${m.entryRoute}</div>
+      </div>
+    </div>`;
+  });
+  html += `</div><p class="disclaimer">This is an AI compatibility estimate, not a psychological diagnosis — the best way to know is to go test one of these for real.</p>
+  <div class="intake-foot"><button class="skip-link" id="restartBtn">Start over</button></div>`;
+  body.innerHTML = html;
+  document.getElementById('restartBtn').addEventListener('click', () => {
+    qIndex = 0; Object.keys(answers).forEach(k => delete answers[k]); renderQuestion();
+  });
+}
+
+renderQuestion();
+
+// ---------- COMPARE ----------
+document.getElementById('compareBtn').addEventListener('click', runCompare);
+document.getElementById('compareInput').addEventListener('keydown', e => { if (e.key === 'Enter') runCompare(); });
+
+async function runCompare(){
+  const val = document.getElementById('compareInput').value.trim();
+  const resultDiv = document.getElementById('compareResult');
+  if (!val){ return; }
+  resultDiv.innerHTML = `<div class="loading-row" style="margin-top:22px;"><span class="spinner"></span> Comparing…</div>`;
+  const prompt = `Compare this career decision for a general student audience: "${val}".
+Return ONLY JSON (no markdown fences), shaped as:
+{"optionA": string, "optionB": string, "rows": [{"factor": string, "a": string, "b": string}]}
+Include 6-8 rows covering factors like education duration, cost, difficulty, earning potential, stability, flexibility, and career growth. Keep each cell to one short phrase.`;
+  try {
+    const raw = await callClaude(prompt);
+    const data = JSON.parse(raw);
+    let html = `<table class="compare-table"><thead><tr><th>Factor</th><th>${data.optionA}</th><th>${data.optionB}</th></tr></thead><tbody>`;
+    data.rows.forEach(r => { html += `<tr><td>${r.factor}</td><td>${r.a}</td><td>${r.b}</td></tr>`; });
+    html += `</tbody></table>`;
+    resultDiv.innerHTML = html;
+  } catch (err) {
+    resultDiv.innerHTML = `<p class="compare-hint">Couldn't generate that comparison — try rephrasing, e.g. "CA vs MBA".</p>`;
+  }
+}
+
+// ---------- AI CHATBOX ----------
+const chatToggle = document.getElementById('chatToggle');
+const chatPanel = document.getElementById('chatPanel');
+const chatClose = document.getElementById('chatClose');
+const chatMessages = document.getElementById('chatMessages');
+const chatInput = document.getElementById('chatInput');
+const chatSend = document.getElementById('chatSend');
+const chatSuggest = document.getElementById('chatSuggest');
+
+let chatHistory = []; // [{role, content}]
+let chatOpened = false;
+
+chatToggle.addEventListener('click', () => {
+  chatPanel.classList.toggle('open');
+  if (chatPanel.classList.contains('open') && !chatOpened){
+    chatOpened = true;
+    addBotMessage("Hi, I'm Mentor Harry. Ask me anything about a career, a subject switch, or a decision you're stuck on — I'll answer based on your actual situation, not a generic script.");
+  }
+});
+chatClose.addEventListener('click', () => chatPanel.classList.remove('open'));
+
+chatSuggest.addEventListener('click', (e) => {
+  const btn = e.target.closest('button[data-q]');
+  if (!btn) return;
+  sendChatMessage(btn.dataset.q);
+});
+
+function addBotMessage(text){
+  const div = document.createElement('div');
+  div.className = 'chat-msg bot';
+  div.innerHTML = text.split('\n').filter(Boolean).map(p => `<p>${p}</p>`).join('');
+  chatMessages.appendChild(div);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+function addUserMessage(text){
+  const div = document.createElement('div');
+  div.className = 'chat-msg user';
+  div.textContent = text;
+  chatMessages.appendChild(div);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+function showTyping(){
+  const div = document.createElement('div');
+  div.className = 'chat-typing';
+  div.id = 'chatTyping';
+  div.innerHTML = '<span></span><span></span><span></span>';
+  chatMessages.appendChild(div);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+function hideTyping(){
+  const t = document.getElementById('chatTyping');
+  if (t) t.remove();
+}
+
+chatSend.addEventListener('click', () => {
+  const val = chatInput.value.trim();
+  if (val) sendChatMessage(val);
+});
+chatInput.addEventListener('keydown', e => {
+  if (e.key === 'Enter'){
+    const val = chatInput.value.trim();
+    if (val) sendChatMessage(val);
+  }
+});
+
+async function sendChatMessage(text){
+  chatSuggest.style.display = 'none';
+  addUserMessage(text);
+  chatInput.value = '';
+  chatInput.disabled = true;
+  chatSend.disabled = true;
+  chatHistory.push({ role: 'user', content: text });
+  showTyping();
+
+  const knownAnswers = Object.keys(answers).length
+    ? QUESTIONS.filter(q => answers[q.key] && answers[q.key] !== '(skipped)').map(q => `${q.q} → ${answers[q.key]}`).join('\n')
+    : 'Not provided yet.';
+
+  const systemContext = `You are the chat assistant inside Mentor Harry, a universal career guidance platform for students and career-changers across ALL fields — engineering, medicine, commerce, law, arts, design, government, defence, trades, agriculture, sports, entrepreneurship, etc. Never assume the user is an engineering or CS student by default.
+
+Give specific, honest, well-grounded answers — real timelines, real entry routes, real trade-offs — not generic motivational filler. If a claim is uncertain, say so plainly instead of guessing confidently. Keep answers conversational and under ~150 words unless the question needs more. Use plain paragraphs, no markdown headers or bullet-heavy formatting.
+
+What this user has already told Mentor Harry during intake (use it if relevant, ignore if not):
+${knownAnswers}`;
+
+  try {
+    const response = await fetch("/api/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        max_tokens: 1000,
+        system: systemContext,
+        messages: chatHistory
+      })
+    });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error || 'AI request failed');
+    const reply = data.content.map(b => b.text || '').join('\n').trim();
+    hideTyping();
+    addBotMessage(reply);
+    chatHistory.push({ role: 'assistant', content: reply });
+  } catch (err) {
+    hideTyping();
+    addBotMessage("Something went wrong reaching Mentor Harry. Try asking again in a moment.");
+  } finally {
+    chatInput.disabled = false;
+    chatSend.disabled = false;
+    chatInput.focus();
+  }
+}
+</script>
+
+</body>
+</html>
